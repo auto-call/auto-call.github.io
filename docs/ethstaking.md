@@ -44,7 +44,7 @@ Ideally, you want to have a machine that is dedicated to ETH staking. Contrarily
 - **RAM**: [Crucial 32GB Kit (2 x 16GB) DDR4-3200 SODIMM](https://www.crucial.fr/memory/ddr4/ct2k16g4sfra32a). I recommend having 32 GB of RAM. With a single validator running, my RAM usage is typically around 20GB.
 - **SSD**: [FireCuda 530 4 TB](https://www.seagate.com/fr/fr/products/gaming-drives/pc-gaming/firecuda-530-ssd/). Again, 4TB is probably overkill, but the blockchain does grow fast, typically 1GB/day. At the time of writing this, I have not fully explored options in the execution client to prune the database, but it seems like it's possible, at the cost of going offline for a day or two. Anyhow, I recommend having at least 2TB.
 - **AC Power Adapter**: [Delippo 120W 19V 6.32A](https://www.amazon.fr/dp/B07MV6C89N?psc=1&ref=ppx_yo2ov_dt_b_product_details).
-- **Case**: [Maxwell Pro Fanless Mini-ITX case](https://akasa.co.uk/update.php?tpl=product/product.detail.tpl&model=A-ITX48-M1B). CPU and disk usage can be pretty heavy when running the validator, so you need some cooling. As my machine is sitting in my living room, I didn't want to have constant fan noise, so I chose this fanless case that dissipates heat with copper tubes and various thermal modules. You can buy it [here](https://www.cartft.com/catalog/il/3459).
+- **Case**: [Maxwell Pro Fanless Mini-ITX case](https://akasa.co.uk/update.php?tpl=product/product.detail.tpl&model=A-ITX48-M1B). CPU and disk usage can be pretty heavy when running the validator, so you need some cooling. As my machine is sitting in my living room, I didn't want to have constant fan noise, so I chose this fanless case that dissipates heat with copper tubes and various thermal modules. I'm really happy with it, as it is completely silent and does not get very hot. You can buy it [here](https://www.cartft.com/catalog/il/3459).
 
 # Linux installation
 
@@ -58,29 +58,43 @@ Follow the steps from CoinCashew's guide, from [Step 2](https://www.coincashew.c
 
 You can check current client distribution estimates [here](https://clientdiversity.org/). Personally, I chose *Besu* as execution client and *Teku* as consensus. So far, they have been running fine, although Besu database seems to be growing quite fast.
 
+## MEV Boost
+
 ## Port forwarding
 
 It is recommended to set up port forwarding on your router for your execution and consensus clients. To my understanding, it is not mandatory for your clients to run correctly, but it will help you have optimal connectivity to peers on the ETH network.
 
-What does port forwarding mean? Your clients communicate with the external world through specific ports (you should have gone through this at [Step 2](https://www.coincashew.com/coins/overview-eth/guide-or-how-to-setup-a-validator-on-eth2-mainnet/part-i-installation/step-2-configuring-node)). By default, your home router will typically block traffic from the external world to your home network through these ports. You need to explicitly allow relevant ports in your router interface. My router is a Orange Livebox 5, if you have a different one, refer to your Internet provider instructions to adapt the steps below.
+What does port forwarding mean? Your clients communicate with the external world through specific ports (you should have gone through this at [Step 2](https://www.coincashew.com/coins/overview-eth/guide-or-how-to-setup-a-validator-on-eth2-mainnet/part-i-installation/step-2-configuring-node)). By default, your home router will typically block traffic from the external world to your home network through these ports. You need to explicitly allow relevant ports in your router interface. My router is a Orange Livebox 5, if you have a different one, refer to your Internet provider instructions to adapt the steps below. The Livebox interface can be accessed at IP 192.168.1.1.
 
 ### DHCP Setup
 
-toto
+First, you want to assign a static IP address to your node. Go to *Advanced Parameters > Network > DHCP*. Under *Static DHCP leases*, find your machine name in the list (it will appear if it's connected to your Livebox), and click *Add*. It should look like this once added (I blurred my equipment name and MAC address).
+
+![DHCP Setup](/assets/images/dhcp.png)
 
 ### NAT Setup
 
-toto
+Then you want to set up the actual port forwards. Go to *Advanced Parameters > Network > NAT/PAT*. Under *Your customized rules*, create a rule for the execution client, a rule for the consensus client. If you plan to use Grafana dashboards to monitor your node and want to be able to access it remotely, you can also add a rule for the Grafana service.
+
+Note that if you use *Prysm* as your consensus client, the port should be 13000 for TCP and 12000 for UDP. For all other consensus clients, the port should be 9000 for both, as per below.
+
+![NAT Setup](/assets/images/nat.png)
+
 
 # Adding a validator to your node
 
 **This is the most critical step, be extra careful**.
 
+
+
 # Monitoring your node
 
+## Grafana
 ## NoIP
 
 # Setting up downtime alerts for your node
+
+## UptimeRobot
 
 # Further fail-safing your setup
 
